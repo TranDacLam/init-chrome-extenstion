@@ -10,7 +10,7 @@ window.addEventListener("message", event => {
     }
   } = event;
 
-  console.log("INIT APP", event)
+  console.log("INIT APP", event.data)
 
   typeMessage == "transcy" && translate(text, options);
 }, false );

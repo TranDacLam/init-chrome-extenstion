@@ -1,13 +1,12 @@
-export const fetchDataBackground = async function(contentScriptQuery,values = {}) {
-  console.log("fetchDataBackground", contentScriptQuery, values)
+export const fetchDataBackground = async function(type, values = {}) {
   return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({
-              contentScriptQuery: contentScriptQuery,
-              values: values
-          },
-          function (response) {
-              resolve(response);
-          }
+					type,
+					values
+				},
+				function (response) {
+					resolve(response);
+				}
       );
   });
 }

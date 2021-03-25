@@ -3,16 +3,15 @@ var { CleanWebpackPlugin } = require('clean-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var Dotenv = require('dotenv-webpack');
 var HtmlWebpackPlugin = require("html-webpack-plugin");
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-var fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2"];
+var fileExtensions = ["jpg", "jpeg", "png", "svg"];
 
 module.exports = {
   mode: process.env.NODE_ENV || "development",
   entry: {
     'init-app': path.join(__dirname, "assets", "js", "init-app.js"),
-    'background-api': path.join(__dirname, "assets", "js", "background-api.js"),
-    'popup': path.join(__dirname, "assets", "js", "popup.js"),
-    'options': path.join(__dirname, "assets", "js", "options.js")
+    'popup': path.join(__dirname, "assets", "js", "popup.js")
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -23,23 +22,36 @@ module.exports = {
     rules: [
       {
         test: /\.m?js$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env']
-            ],
-            plugins: ['@babel/plugin-transform-runtime']
-          }
+          loader: 'babel-loader'
         }
       },
       {
-        test: new RegExp('.(' + fileExtensions.join('|') + ')$/i'),
+        test: /\.s[ac]ss$/i,
+        exclude: /(node_modules|bower_components)/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: (resourcePath, context) => {
+                // publicPath is the relative path of the resource to the context
+                // e.g. for ./css/admin/main.css the publicPath will be ../../
+                // while for ./css/main.css the publicPath will be ../
+                return path.relative(path.dirname(resourcePath), context) + '/';
+              },
+            }
+          },
+          "css-loader",
+          "resolve-url-loader",
+          "sass-loader"
+        ],  
+      },
+      {
+        test: /\.(png|jpe?g|svg)$/i,
         loader: "file-loader",
         options: {
-          outputPath: 'images',
-          name: '[name].[ext]',
+          name: 'img/[name].[ext]',
         },
       }
     ]
@@ -47,6 +59,9 @@ module.exports = {
   devtool: 'cheap-source-map',
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+    }),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -60,7 +75,7 @@ module.exports = {
             }))
           }
         },
-        { from:'assets/images', to:'img' },
+        { from:'assets/img', to:'img' },
         { from: 'background.js', to: 'background.js'}
       ]
     }),
