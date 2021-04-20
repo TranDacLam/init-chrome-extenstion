@@ -1,6 +1,6 @@
 import { fetchDataBackground } from './helper';
 import languages from './languages';
-import config from './../../config/env'
+import { URL_TRANSLATE_GOOGLEAPI } from './../../constants/api'
 
 function translate(text, opts) {
     opts = opts || {};
@@ -25,7 +25,7 @@ function translate(text, opts) {
     opts.from = languages.getCode(opts.from);
     opts.to = languages.getCode(opts.to);
 
-    var url = `${config.URL_TRANSLATE}?client=gtx&sl=${opts.from}&tl=${opts.to}&dt=t&q=${text.replace(/\s/g, '%20')}`;
+    var url = `${URL_TRANSLATE_GOOGLEAPI}?client=gtx&sl=${opts.from}&tl=${opts.to}&dt=t&q=${text.replace(/\s/g, '%20')}`;
 
     return fetchDataBackground('request-api', { url }).then(function (res) {
 

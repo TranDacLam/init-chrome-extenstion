@@ -24,7 +24,7 @@
     {
       "js": ["js/init-app.js"],
       "matches": ["https://*.fireapps.io/*", "https://*.ngrok.io/*", "http://*/*"],
-      "run_at": "document_start"
+      "run_at": "document_end"
     }
   ]
 }
