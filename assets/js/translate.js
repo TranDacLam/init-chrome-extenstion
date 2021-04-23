@@ -1,8 +1,15 @@
-import { fetchDataBackground } from './helper';
+import { fetchDataBackground } from './../helpers/background';
 import languages from './languages';
-import { URL_TRANSLATE_GOOGLEAPI } from './../../constants/api'
+import { URL_TRANSLATE_GOOGLEAPI } from '../constants/api';
 
 function translate(text, opts) {
+    if(!text){
+      return {
+        text,
+        from: opts.from,
+        to: opts.to
+      };
+    }
     opts = opts || {};
 
     var e;
@@ -62,5 +69,6 @@ function translate(text, opts) {
 
 export default translate;
 export{
-  languages
+  languages,
+  translate
 }

@@ -1,18 +1,17 @@
-import translate from './translate';
+import { multipleTranslations } from './transcy';
 
 window.addEventListener("message", event => {
   if (event.source != window) return;
   const {
     data: { 
       typeMessage = "", 
-      text = "",
-      options = null
+      data = null
     }
   } = event;
 
-  console.log("INIT APP", event.data)
+  console.log("INIT APP");
 
-  typeMessage == "transcy" && translate(text, options);
+  typeMessage == "transcy" && multipleTranslations({data});
 }, false );
 
 (function() {

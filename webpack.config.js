@@ -79,7 +79,9 @@ module.exports = {
         { from: 'background.js', to: 'background.js'}
       ]
     }),
-    new Dotenv(),
+    new Dotenv({
+      path: process.env.NODE_ENV === 'production' ? path.join(__dirname, '.env.prod') : (process.env.NODE_ENV === 'development' ? path.join(__dirname, '.env.dev') : path.join(__dirname, '.env.local'))
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "view", "popup.html"),
       filename: "popup.html",
